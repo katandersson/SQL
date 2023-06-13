@@ -1,0 +1,54 @@
+#These examples are in PostGreSQL, and I'm querying a database with multiple tables in it to answer questions about the data. 
+
+-- 1. Join the two tables and show title and director of the TV shows and Movies.
+
+SELECT * FROM "Netflix_Database"."netflix_titles_info" LIMIT 5;
+SELECT t.title
+,t.show_id
+,p.director 
+FROM "Netflix_Database"."netflix_people" p
+LEFT JOIN "Netflix_Database"."netflix_titles_info" t
+ON p.show_id = t.show_id
+LIMIT 10;
+
+
+--2. How many movie titles are there in the database? (movies only, not tv shows)
+
+SELECT COUNT(title)
+FROM "Netflix_Database"."netflix_titles_info"
+WHERE type = 'Movie';
+
+-- ANSWER: 6131
+
+-- 3. When was the most recent batch of tv shows and/or movies added to the database?
+
+SELECT MAX(date(date_added))
+FROM "Netflix_Database"."netflix_titles_info";
+
+--ANSWER: 2021-09-25
+
+-- 4. List all the movies and tv shows in alphabetical order.
+
+SELECT title
+FROM "Netflix_Database"."netflix_titles_info"
+ORDER BY title asc;
+
+-- 5. Who was the Director for the movie Bright Star?
+
+SELECT people.director
+FROM "Netflix_Database"."netflix_titles_info" titles
+LEFT JOIN "Netflix_Database"."netflix_people" people
+ON titles.show_id = people.show_id
+WHERE titles.title = 'Bright Star';
+
+--ANSWER: JANE CAMPION
+
+-- 6. What is the oldest movie in the database and what year was it made?
+
+SELECT release_year, title
+FROM "Netflix_Database"."netflix_titles_info"
+WHERE type = 'Movie'
+ORDER BY release_year asc
+LIMIT 1;
+
+--ANSWER: 1942, PRELUDE TO WAR

@@ -1,0 +1,77 @@
+#This SQL shows queries of a database with multiple tables which are used to show customer order data and analytics.
+
+/* 1. What columns are in the customers table? */
+SELECT * FROM BIT_DB.customers LIMIT 20;
+
+
+/* 2. What columns are in the JanSales table? */
+SELECT * FROM BIT_DB.JanSales LIMIT 20;
+
+
+/* 3. How to see incorrect rows in data? */
+SELECT * FROM BIT_DB.customers;
+/* Add these two lines to the end of queries where we use order id:
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID' */
+
+/* 4. Fixing data where cells are blank or null:
+WHERE order_id IS NOT NULL
+AND order_id <> '' */
+
+/* 5. How many orders wereplaced in January? */
+SELECT COUNT(orderID) 
+FROM BIT_DB.JanSales
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID';
+
+
+/* 6. How many of those orders were for an iPhone */
+SELECT COUNT(orderID)
+FROM BIT_DB.JanSales
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID'
+AND Product = 'iPhone';
+
+
+/* 7. Select the customer account numbers for all the orders that were placed in February */
+SELECT distinct acctnum 
+FROM BIT_DB.customers AS Cust
+INNER JOIN BIT_DB.FebSales AS Feb 
+ON Cust.order_id = Feb.orderID
+WHERE length(Feb.orderID) = 6
+AND Feb.orderID <> 'Order ID';
+
+/* 8. Which product was the cheapest one sold in January, and what was the price? */
+SELECT distinct 
+Product
+,price
+FROM BIT_DB.JanSales 
+WHERE price in (SELECT min(price) FROM BIT_DB.JanSales);
+
+
+/* 9. What is the total revenue for each product sold in January? */
+SELECT SUM(Quantity)*price as revenue
+,product
+FROM BIT_DB.JanSales
+GROUP BY product;
+
+/* 10. Which products were sold in February at 548 Lincoln St, Seattle,
+ WA, 98101, how many of each were sold, and what was the total revenue? */
+SELECT SUM(Quantity)
+,product
+,sum(quantity)*price as revenue
+FROM BIT_DB.FebSales
+WHERE location = '548 Lincoln St, Seattle, WA 98101'
+GROUP BY product;
+
+/* 11. How many customers ordered more than 2 products at a time in February, 
+and what was the average amount spent for those customers? */
+SELECT 
+COUNT(distinct cust.acctnum)
+,avg(quantity*price)
+FROM BIT_BD.FebSales Feb;
+LEFT JOIN BIT_BD.customer cust
+ON Feb.orderID = cust.order_id
+WHERE Feb.Quantity >2
+AND length(orderid) = 6
+AND orderid <> 'Order Id';

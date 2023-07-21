@@ -1,4 +1,4 @@
-#This project containsa database with several tables such as information about customers, employees, invoices, etc.
+#This project contains a database with several tables such as information about customers, employees, invoices, etc.
 #Here, I show examples of sales and customer analytics.
 
 /* 1.  Show customers who are not in the US*/
@@ -44,7 +44,7 @@ ON cust.SupportRepId = emp.EmployeeId
 JOIN chinook.Invoices Inv 
 ON Inv.CustomerId = cust.CustomerId;
 
-/* 7. Show the Invoice Total, Customer name, Country, and Sakes Agent name for all invoices
+/* 7. Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices
 and customers*/
 SELECT
 inv.total
@@ -59,7 +59,7 @@ ON cust.SupportRepID = emp.EmployeeId
 JOIN chinook.Invoices Inv
 ON Inv.CustomerId = cust.CustomerID;
 
-/* 8. How many Inovices were there in 2009?*/
+/* 8. How many invoices were there in 2009?*/
 SELECT COUNT(InvoiceDate) 
 FROM chinook.invoices
 WHERE InvoiceDate like '%2009%';
